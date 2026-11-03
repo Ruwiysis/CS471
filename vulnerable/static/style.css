@@ -1,0 +1,71 @@
+:root {
+   --bg: #1A1A1A;
+    --text: #E4E4E4;
+    --cyan: #A8DADC;
+    --pink: #FFC1CC;
+    --lavender: #B39CD0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+nav {
+    padding: 15px 30px;
+    border-bottom: 2px solid var(--cyan);
+}
+
+nav a {
+    color: var(--cyan);
+    margin-right: 18px;
+    text-decoration: none;
+}
+
+.page {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
+
+h1 {
+     color: var(--pink);
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0 14px 0;
+   background: #262626;
+    color: var(--text);
+    border: 1px solid var(--cyan);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background: var(--cyan);
+    color: #1A1A1A;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.note {
+    border: 1px solid var(--cyan);
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 14px;
+}
+
+.message {
+    color: var(--lavender);
+}
+
+.page a {
+    color: var(--cyan);
+}

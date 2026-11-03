@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secure Notes App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="/notes">My Notes</a>
+        <a href="/add">Add Note</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+    <div class="page">
+        {% with msgs = get_flashed_messages() %}
+            {% for m in msgs %}
+                <p class="message">{{ m }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

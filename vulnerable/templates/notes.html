@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>My Notes</h1>
+
+{% if notes %}
+    {% for n in notes %}
+    <div class="note">
+        <h3>{{ n["title"] }}</h3>
+        <p>{{ n["content"] }}</p>
+        <a href="/note/{{ n['note_id'] }}">Open</a>
+        <form method="post" action="/delete/{{ n['note_id'] }}">
+            <button type="submit">Delete</button>
+        </form>
+    </div>
+    {% endfor %}
+{% else %}
+    <p>You have no notes yet.</p>
+{% endif %}
+{% endblock %}
