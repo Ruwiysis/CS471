@@ -7,7 +7,7 @@
     {% for n in notes %}
     <div class="note">
         <h3>{{ n["title"] }}</h3>
-        <p>{{ n["content"] }}</p>
+        <p>{{ n["content"] | safe }}</p>
         <a href="/note/{{ n['note_id'] }}">Open</a>
         <form method="post" action="/delete/{{ n['note_id'] }}">
             <button type="submit">Delete</button>
