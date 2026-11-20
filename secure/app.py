@@ -1,9 +1,35 @@
+import re
 import sqlite3
 from flask import Flask, render_template, request, redirect, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = "MySecretKeyIsSOPrettyButSecret"
+
+USERNAME_MIN, USERNAME_MAX = 3, 30
+PASSWORD_MIN, PASSWORD_MAX = 8, 128
+TITLE_MAX, CONTENT_MAX = 100, 2000
+
+def check_account(name, pw):
+    if not name or not pw:
+        return "Username and password are required"
+    if not (USERNAME_MIN <= len(name) <= USERNAME_MAX):
+        return f"Username must be {USERNAME_MIN}-{USERNAME_MAX} characters"
+    if not re.fullmatch(r"[A-Za-z0-9_]+", name):
+        return "Username can only use letters, numbers and _"
+    if not (PASSWORD_MIN <= len(pw) <= PASSWORD_MAX):
+        return f"Password must be {PASSWORD_MIN}-{PASSWORD_MAX} characters"
+    return None
+
+def check_note(title, content):
+    if not title or not content:
+        return "Title and content are required"
+    if len(title) > TITLE_MAX:
+        return f"Title must be at most {TITLE_MAX} characters"
+    if len(content) > CONTENT_MAX:
+        return f"Content must be at most {CONTENT_MAX} characters"
+    return None
+
 
 def get_db(): 
     conn = sqlite3.connect("notes.db")
@@ -39,8 +65,12 @@ def home():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        name = request.form["username"]
-        pw = request.form["password"]
+        name = request.form.get("username", "").strip()
+        pw = request.form.get("password", "")
+        error = check_account(name, pw)
+        if error:
+            flash(error)
+            return redirect("/register")
         hashed = generate_password_hash(pw)
 
         db = get_db()
@@ -63,8 +93,11 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        name = request.form["username"]
-        pw = request.form["password"]
+        name = request.form.get("username", "").strip()
+        pw = request.form.get("password", "")
+        if not name or not pw:
+            flash("Username and password are required")
+            return redirect("/login")
 
         db = get_db()
         user = db.execute(
@@ -107,8 +140,12 @@ def add_note():
         return redirect("/login")
 
     if request.method == "POST":
-        title = request.form["title"]
-        content = request.form["content"]
+        title = request.form.get("title", "").strip()
+        content = request.form.get("content", "").strip()
+        error = check_note(title, content)
+        if error:
+            flash(error)
+            return redirect("/add")
 
         db = get_db()
         db.execute(
